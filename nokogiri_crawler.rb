@@ -23,16 +23,23 @@ class NokogiriCrawler
 			case num
 			when 2,3
 				# 科目コードと科目名の整形
-				lesson_row_formated << lesson_row.css("td:nth-child(#{num})").text.gsub(/(\r\n|\r|\n)/, "").strip!
+				lesson_row_formated << lesson_row.css("td:nth-child(#{num})").text.gsub(/(\r\n|\r|\n|)/, "").strip!
 			when 5
 				# 学期・曜日・時限・教室の整形
 				lesson_row_formated << lesson_koma_format(lesson_row.css("td:nth-child(#{num})").text.gsub(/(\r\n|\r|\n)/, ""))
 			else
 				lesson_row_formated << lesson_row.css("td:nth-child(#{num})").text.gsub(/(\r\n|\r|\n)/, "")
 			end
-		end
 
-		lesson_row_formated.flatten!
+		end
+		# 各授業ページへのリンクを取得
+		lesson_row_formated << "https://sy.rikkyo.ac.jp" + lesson_row.css("td:nth-child(3) a")[0][:href]
+
+		lesson_row_formated.flatten!.map do |l|
+			if l.length <= 0
+				l = 'nil'
+			end
+		end
 	end
 
 	def lesson_koma_format(data)
@@ -52,6 +59,7 @@ class NokogiriCrawler
 				s_formted = s.gsub(/#{days.keys.join('|')}/, days)
 				koma << s_formted
 			else
+				# 時限を全角から半角に
 				s.split.each {|x| koma << x.tr("０-９", "0-9")}
 			end
 		end

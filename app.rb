@@ -13,7 +13,6 @@ capybara_crawler.make_links_list_for_department.each do |link|
 
 	nokogiri = NokogiriCrawler.new(html)
 	nokogiri.scraping_lessons
-	#nokogiri.return_lesson_data
 
 	# 処理を60秒停止する
 	sleep(60)
