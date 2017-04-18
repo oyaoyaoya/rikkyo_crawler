@@ -1,12 +1,23 @@
-gem 'nokogiri'
-require './capybara_crawle'
-require './nokogiri_crawle'
+require './capybara_crawler'
+require './nokogiri_crawler'
 
-capybara_crawle = CapybaraCrawler.new
-capybara_crawle.set_target_url
-capybara_crawle.access_to_target
-capybara_crawle.move_to_koma_page
-html = capybara_crawle.return_html
+# Capybaraのオブジェクトを作成
+capybara_crawler = CapybaraCrawler.new
 
-nokogiri = NokogiriCrawle.new(html)
-nokogiri.get_list
+# 親となるページにアクセスする
+capybara_crawler.access_to_target(capybara_crawler.set_parent_url)
+
+capybara_crawler.make_links_list_for_department.each do |link|
+	capybara_crawler.access_to_target(link)
+	html = capybara_crawler.return_html
+
+	nokogiri = NokogiriCrawler.new(html)
+	nokogiri.scraping_lessons
+	#nokogiri.return_lesson_data
+
+	# 処理を60秒停止する
+	sleep(60)
+end
+
+
+
