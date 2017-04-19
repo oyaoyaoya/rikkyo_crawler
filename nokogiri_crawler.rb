@@ -1,9 +1,12 @@
 gem 'nokogiri'
+require './lib/department'
+require './lib/faculty'
 
 class NokogiriCrawler
-	def initialize(html)
+	def initialize(html, fa_de_id)
 		# htmlをパースしてオブジェクトを生成
 		@doc = Nokogiri::HTML.parse(html)
+		@fa_de_id = fa_de_id
 
 		@lesson_data = []
 	end
@@ -14,11 +17,13 @@ class NokogiriCrawler
 			@lesson_data << format_each_lesson(lesson_row)
 		end
 
-		p @lesson_data
+		puts @lesson_data
 	end
 
 	def format_each_lesson(lesson_row)
 		lesson_row_formated = []
+		lesson_row_formated << @fa_de_id
+
 		for num in 1..7 do
 			case num
 			when 2,3
@@ -27,6 +32,8 @@ class NokogiriCrawler
 			when 5
 				# 学期・曜日・時限・教室の整形
 				lesson_row_formated << lesson_koma_format(lesson_row.css("td:nth-child(#{num})").text.gsub(/(\r\n|\r|\n)/, ""))
+			when 6
+				lesson_row_formated << lesson_campus_format(lesson_row.css("td:nth-child(#{num})").text.gsub(/(\r\n|\r|\n)/, ""))
 			else
 				lesson_row_formated << lesson_row.css("td:nth-child(#{num})").text.gsub(/(\r\n|\r|\n)/, "")
 			end
@@ -36,14 +43,31 @@ class NokogiriCrawler
 		lesson_row_formated << "https://sy.rikkyo.ac.jp" + lesson_row.css("td:nth-child(3) a")[0][:href]
 
 		lesson_row_formated.flatten!.map do |l|
+			# 空文字ならnilを
+			# 文字があるならそれ自身を代入
 			if l.length <= 0
 				l = 'nil'
+			else
+				l = l
 			end
 		end
 	end
 
-	def lesson_koma_format(data)
+	def self.belongs_format(link)
+		belongs = []
+		if faculty_id = link.match(/\(crclm\)=X(\S{2})/)
+			faculty = Faculty.new(faculty_id[1]).select_faculty
+			belongs << faculty
+		end
+		if department_id = link.match(/\(crclm\)=X(\S{5})/)
+			department = Department.new(department_id[1]).select_department
+			belongs << department
+		end
 
+		belongs
+	end
+
+	def lesson_koma_format(data)
 		# 学期・曜日・時限・教室を整形する。
 		koma = []
 		splited = data.split("・")
@@ -64,6 +88,19 @@ class NokogiriCrawler
 			end
 		end
 		koma
+	end
+
+	def lesson_campus_format(data)
+		# 校地を数に変換
+		campus = ""
+		if data == "池袋"
+			campus = "1"
+		elsif data == "新座"
+			campus = "2"
+		else
+			campus = "3"
+		end
+		campus
 	end
 
 end
