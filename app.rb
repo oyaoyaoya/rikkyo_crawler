@@ -1,5 +1,6 @@
 require './capybara_crawler'
 require './nokogiri_crawler'
+require './csv_crawler'
 
 # Capybaraのオブジェクトを作成
 capybara_crawler = CapybaraCrawler.new
@@ -15,7 +16,7 @@ capybara_crawler.make_links_list_for_department.each do |link|
 	fa_de_id = NokogiriCrawler.belongs_format(link)
 
 	nokogiri = NokogiriCrawler.new(html, fa_de_id)
-	nokogiri.scraping_lessons
+	CsvCrawler.new(nokogiri.scraping_lessons).generate_csv
 
 	# 処理を60秒停止する
 	sleep(60)
