@@ -76,7 +76,8 @@ class NokogiriCrawler
 			when 0
 				# 学期を数に変換
 				# DB設計によっては不要か
-				s_formted = s.sub(/春.*/, "1").sub(/秋.*/,"2").sub(/通年/,"3")
+				# 現在コメントアウト。学期は文字列のままDBへ
+				s_formted = s #.sub(/春.*/, "1").sub(/秋.*/,"2").sub(/通年/,"3")
 				koma << s_formted
 			when 1
 				# 曜日を数に変換

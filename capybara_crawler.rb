@@ -36,6 +36,33 @@ class CapybaraCrawler
 		@links
 	end
 
+	def find_links()
+    @links = []
+    all('a').each do |a|
+      u = a[:href]
+      next if u.nil? or u.empty?
+      @links << u
+			break if @links.length >= 10
+		end
+    @links.uniq!
+    @links
+	end
+
+	def next_page_exist
+		current_page = @session.first('b').text.to_i
+		if @session.first(:link, "#{current_page + 1}")
+			@session.first(:link, "#{current_page + 1}")
+		else
+			false
+		end
+	end
+
+	# jsでないと移動できないリンクをクリックする
+	# 引数はcapybaraのnode elementを渡す
+	def click_link(link)
+		link.click
+	end
+
 	def return_html
 		# スクリーンショットを取得
 		# 必須ではない。デバック用。
@@ -43,6 +70,10 @@ class CapybaraCrawler
 
 		# visit中のhtmlを返す
 		html = @session.html
+	end
+
+	def screen_shot
+		@session.save_screenshot('this_is_it.png')
 	end
 
 end
