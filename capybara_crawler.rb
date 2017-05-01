@@ -36,22 +36,10 @@ class CapybaraCrawler
 		@links
 	end
 
-	def find_links()
-    @links = []
-    all('a').each do |a|
-      u = a[:href]
-      next if u.nil? or u.empty?
-      @links << u
-			break if @links.length >= 10
-		end
-    @links.uniq!
-    @links
-	end
-
 	def next_page_exist
 		current_page = @session.first('b').text.to_i
-		if @session.first(:link, "#{current_page + 1}")
-			@session.first(:link, "#{current_page + 1}")
+		if @session.first(:link, "#{current_page + 1}", exact: true)
+			@session.first(:link, "#{current_page + 1}", exact: true)
 		else
 			false
 		end
@@ -61,6 +49,7 @@ class CapybaraCrawler
 	# 引数はcapybaraのnode elementを渡す
 	def click_link(link)
 		link.click
+		puts "遷移！"
 	end
 
 	def return_html
