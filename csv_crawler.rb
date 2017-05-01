@@ -1,9 +1,10 @@
  require 'csv'
 
  class CsvCrawler
-	def initialize(data, fa_de_id)
-		@lesson_data = data.first
-		@fa_de_id = fa_de_id
+	def initialize(data, file_name, dir_name)
+		@lesson_data = data
+		@file_name = file_name
+		@dir_name = dir_name
 	end
 
 	def generate_csv
@@ -16,7 +17,9 @@
 			end
 		end
 
-		File.open("lesson_#{@fa_de_id[0]}_#{@fa_de_id[1]}.csv", 'a') do |file|
+		time_stamp = Time.now.strftime("%H%M%S")
+
+		File.open("#{@dir_name}/#{@file_name}", 'a') do |file|
 			file.write(csv_data)
 		end
 
