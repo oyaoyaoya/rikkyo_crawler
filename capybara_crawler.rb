@@ -36,6 +36,7 @@ class CapybaraCrawler
 		@links
 	end
 
+	# パンくずに次のページが存在するかどうか
 	def next_page_exist
 		current_page = @session.first('b').text.to_i
 		if @session.first(:link, "#{current_page + 1}", exact: true)
@@ -49,7 +50,6 @@ class CapybaraCrawler
 	# 引数はcapybaraのnode elementを渡す
 	def click_link(link)
 		link.click
-		puts "遷移！"
 	end
 
 	def return_html
@@ -61,6 +61,7 @@ class CapybaraCrawler
 		html = @session.html
 	end
 
+	# 確認用
 	def screen_shot
 		@session.save_screenshot('this_is_it.png')
 	end

@@ -19,7 +19,7 @@
 
 		time_stamp = Time.now.strftime("%H%M%S")
 
-		File.open("#{@dir_name}/#{@file_name}", 'a') do |file|
+		File.open("lesson_data/#{@dir_name}/#{@file_name}", 'a') do |file|
 			file.write(csv_data)
 		end
 
