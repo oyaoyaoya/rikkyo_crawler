@@ -3,10 +3,10 @@ require './lib/department'
 require './lib/faculty'
 
 class NokogiriCrawler
-	def initialize(html, fa_de_id)
+	def initialize(html, relative_id)
 		# htmlをパースしてオブジェクトを生成
 		@doc = Nokogiri::HTML.parse(html)
-		@fa_de_id = fa_de_id
+		@fa_de_id = relative_id
 
 		@lesson_data = []
 	end
@@ -112,4 +112,12 @@ class NokogiriCrawler
 		campus
 	end
 
+	# lesson_detail用
+	def scraping_lesson_detail
+		@doc.css('.line_y_label+ td').each do |d|
+			puts "------------"
+			@lesson_data << d.text.gsub(/(\r\n|\r|\n)/, "").gsub(/\s/, "")
+		end
+		@lesson_data
+	end
 end

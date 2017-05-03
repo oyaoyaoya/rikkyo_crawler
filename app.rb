@@ -49,6 +49,3 @@ capybara_crawler.make_links_list_for_department.each do |link|
 	# 処理を60秒停止する
 	sleep(60)
 end
-
-
-
