@@ -47,7 +47,7 @@ class NokogiriCrawler
 		lesson_row_formated << "https://sy.rikkyo.ac.jp" + lesson_row.css("td:nth-child(3) a")[0][:href]
 		# 年度を追加
 		# プログラム上は現在の年を追加
-		lesson_row_formated << Time.now.year
+		lesson_row_formated << "#{Time.now.year}"
 
 		lesson_row_formated.flatten!.map do |l|
 			# 空文字ならnilを
