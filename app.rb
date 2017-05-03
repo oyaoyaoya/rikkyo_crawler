@@ -9,7 +9,7 @@ capybara_crawler = CapybaraCrawler.new
 capybara_crawler.access_to_target(capybara_crawler.set_parent_url)
 
 # ディレクトリの名前をセット
-dir_name = "lesson_data_#{Time.now.strftime("%H%M%S")}"
+dir_name = "lesson_data_#{Time.now.strftime("%m%d")}_#{Time.now.strftime("%H%M%S")}"
 Dir.mkdir("lesson_data/#{dir_name}", 0755)
 
 capybara_crawler.make_links_list_for_department.each do |link|
