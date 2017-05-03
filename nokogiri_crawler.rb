@@ -29,10 +29,14 @@ class NokogiriCrawler
 			when 2,3
 				# 科目コードと科目名の整形
 				lesson_row_formated << lesson_row.css("td:nth-child(#{num})").text.gsub(/(\r\n|\r|\n|)/, "").strip!
+			when 4
+				# 担当者名を半角スペースで区切る
+				lesson_row_formated << lesson_row.css("td:nth-child(#{num})").inner_html.gsub(/(<br>)/, " ")
 			when 5
 				# 学期・曜日・時限・教室の整形
 				lesson_row_formated << lesson_koma_format(lesson_row.css("td:nth-child(#{num})").text.gsub(/(\r\n|\r|\n)/, ""))
 			when 6
+				# キャンパス名を数字に変換
 				lesson_row_formated << lesson_campus_format(lesson_row.css("td:nth-child(#{num})").text.gsub(/(\r\n|\r|\n)/, ""))
 			else
 				lesson_row_formated << lesson_row.css("td:nth-child(#{num})").text.gsub(/(\r\n|\r|\n)/, "")
