@@ -34,10 +34,10 @@ capybara_crawler.make_links_list_for_department.each do |link|
 
 		# 次のページが存在する場合は遷移
 		# ない場合は次の学科ページへ
-		if capybara_crawler.next_page_exist
+		if next_page = capybara_crawler.next_page_exist
 			CsvCrawler.new(nokogiri.scraping_lessons, file_name, dir_name).generate_csv
 
-			capybara_crawler.click_link(capybara_crawler.next_page_exist)
+			capybara_crawler.click_link(next_page)
 			sleep(10)
 		else
 			# 最後のページの書き出し

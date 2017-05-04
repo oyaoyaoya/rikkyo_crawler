@@ -30,6 +30,7 @@ CsvCrawler.get_files_list(dir_name).each do |file|
 		nokogiri = NokogiriCrawler.new(capybara_crawler.return_html, "")
 
 		lesson_data << nokogiri.scraping_lesson_detail
+		p lesson_data
 
 		break
 	end
